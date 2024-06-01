@@ -1,0 +1,347 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Функция для добавления товара в корзину
+        function addToCart(productId, productName, productPrice) {
+            // Создаем новый элемент cart-item
+            let cartItem = document.createElement('li');
+            cartItem.classList.add('cart-item');
+
+            // Создаем элементы для картинки, описания и цены товара
+            let itemImg = document.createElement('img');
+            itemImg.src = '/images/' + productId + '.jpg'; // Замените на правильный путь к картинке
+            let itemDescription = document.createElement('div');
+            itemDescription.classList.add('cart-item-description');
+            itemDescription.textContent = productName;
+            let itemPrice = document.createElement('div');
+            itemPrice.classList.add('cart-item-price');
+            itemPrice.textContent = productPrice;
+
+            // Добавляем элементы в cart-item
+            cartItem.appendChild(itemImg);
+            cartItem.appendChild(itemDescription);
+            cartItem.appendChild(itemPrice);
+
+            // Добавляем cart-item в корзину
+            let cartItems = document.querySelector('.cart-items');
+
+            // Проверка, существует ли уже такой товар в корзине
+            let itemExists = false;
+            cartItems.querySelectorAll('.cart-item').forEach(item => {
+                if (item.querySelector('.cart-item-description').textContent === productName) {
+                    itemExists = true;
+                    // Увеличиваем количество товара
+                    item.querySelector('.cart-item-price').textContent = (
+                        parseFloat(item.querySelector('.cart-item-price').textContent) + productPrice
+                    ).toFixed(2);
+                    return;
+                }
+            });
+
+            if (!itemExists) {
+                cartItems.appendChild(cartItem);
+            }
+
+            // Обновляем общую стоимость
+            updateTotalPrice();
+        }
+
+        // Функция для удаления товара из корзины
+        function removeFromCart(productId) {
+            // Находим cart-item с соответствующим productId
+            let cartItems = document.querySelectorAll('.cart-item');
+            for (let i = 0; i < cartItems.length; i++) {
+                let itemId = cartItems[i].querySelector('.cart-item-description').textContent;
+                if (itemId === productId) {
+                    cartItems[i].remove();
+                    break;
+                }
+            }
+
+            // Обновляем общую стоимость
+            updateTotalPrice();
+        }
+
+        // Функция для очистки корзины
+        function clearCart() {
+            let cartItems = document.querySelectorAll('.cart-item');
+            for (let i = 0; i < cartItems.length; i++) {
+                cartItems[i].remove();
+            }
+
+            // Обновляем общую стоимость
+            updateTotalPrice();
+        }
+
+        // Функция для обновления общей стоимости
+        function updateTotalPrice() {
+            let cartItems = document.querySelectorAll('.cart-item');
+            let totalPrice = 0;
+            for (let i = 0; i < cartItems.length; i++) {
+                let itemPrice = parseFloat(cartItems[i].querySelector('.cart-item-price').textContent);
+                totalPrice += itemPrice;
+            }
+
+            // Отображаем общую стоимость
+            document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+        }
+
+        // Функция для открытия модального окна
+        function openModal() {
+            let modal = document.querySelector('.modal');
+            modal.style.display = 'block';
+        }
+
+        // Функция для закрытия модального окна
+        function closeModal() {
+            let modal = document.querySelector('.modal');
+            modal.style.display = 'none';
+        }
+
+        // Обработчик события для кнопки "Добавить в корзину"
+        let addToCartButtons = document.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                let productId = button.dataset.productId;
+                let productName = button.dataset.productName;
+                let productPrice = button.dataset.productPrice;
+                addToCart(productId, productName, productPrice);
+            });
+        });
+
+        // Обработчик события для кнопки "Удалить из корзины"
+        let removeFromCartButtons = document.querySelectorAll('.remove-from-cart');
+        removeFromCartButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                let productId = button.dataset.productId;
+                removeFromCart(productId);
+            });
+        });
+
+        // Обработчик события для кнопки "Очистить корзину"
+        let clearCartButton = document.querySelector('.clear-cart-btn');
+        clearCartButton.addEventListener('click', function () {
+            clearCart();
+        });
+    });
+</script>
+вставь этот код в этот
+
+
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Корзина</title> <style> /* Общие стили */ body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f7f7f7; position: relative; }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        position: relative;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .cart-items {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .cart-item {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .cart-item img {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 5px;
+        margin-right: 20px;
+    }
+
+    .cart-item-description {
+        flex-grow: 1;
+    }
+
+    .cart-item-price {
+        font-weight: bold;
+    }
+
+    .cart-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .cart-controls button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #f44336;
+        color: white;
+        cursor: pointer;
+    }
+
+    .total-price {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* Стили для навигационного меню */
+    nav {
+        background-color: #333;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: #fff;
+        margin: 0 15px;
+        font-size: 18px;
+        transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+        color: #f44336;
+    }
+
+    /* Стили для модального окна */
+    .modal {
+        display: none; /* Скрываем модальное окно по умолчанию */
+        position: fixed; /* Фиксированное положение */
+        z-index: 1; /* Над всеми остальными элементами */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* Добавляем прокрутку, если содержимое слишком большое */
+        background-color: rgb(0, 0, 0); /* Цвет фона */
+        background-color: rgba(0, 0, 0, 0.4); /* Цвет фона с прозрачностью */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% отверстия сверху и внизу */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Ширина модального окна */
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover, .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+</head> <body> <nav> <a href="/">Главная</a> <a href="/">Меню</a> <!-- Добавить ссылку на корзину --> <a href="/cart">Корзина</a> </nav> <div class="container"> <h1>Корзина</h1> <ul class="cart-items"> <!-- В этом месте будут отображаться добавленные товары --> </ul> <div class="cart-controls"> <div class="total-price">Общая стоимость: <span id="totalPrice">0</span></div> <div> <button class="clear-cart-btn">Очистить корзину</button> <button class="pay-btn">Оплатить</button> </div> </div> </div> <script> // Функция для добавления товара в корзину 
+function addToCart(productId, productName, productPrice) {
+    // Создаем новый элемент cart-item
+    let cartItem = document.createElement('li');
+    cartItem.classList.add('cart-item');
+
+    // Создаем элементы для картинки, описания и цены товара
+    let itemImg = document.createElement('img');
+    itemImg.src = '/images/' + productId + '.jpg'; // Замените на правильный путь к картинке
+    let itemDescription = document.createElement('div');
+    itemDescription.classList.add('cart-item-description');
+    itemDescription.textContent = productName;
+    let itemPrice = document.createElement('div');
+    itemPrice.classList.add('cart-item-price');
+    itemPrice.textContent = productPrice;
+
+    // Добавляем элементы в cart-item
+    cartItem.appendChild(itemImg);
+    cartItem.appendChild(itemDescription);
+    cartItem.appendChild(itemPrice);
+
+    // Добавляем cart-item в корзину
+    let cartItems = document.querySelector('.cart-items');
+
+    // Проверка, существует ли уже такой товар в корзине
+    let itemExists = false;
+    cartItems.querySelectorAll('.cart-item').forEach(item => {
+        if (item.querySelector('.cart-item-description').textContent === productName) {
+            itemExists = true;
+            // Увеличиваем количество товара
+            item.querySelector('.cart-item-price').textContent = (
+                parseFloat(item.querySelector('.cart-item-price').textContent) + productPrice
+            ).toFixed(2);
+            return;
+        }
+    });
+
+    if (!itemExists) {
+        cartItems.appendChild(cartItem);
+    }
+
+    // Обновляем общую стоимость
+    updateTotalPrice();
+}
+
+    // Функция для удаления товара из корзины
+    function removeFromCart(productId) {
+        // Находим cart-item с соответствующим productId
+        let cartItems = document.querySelectorAll('.cart-item');
+        for (let i = 0; i < cartItems.length; i++) {
+            let itemId = cartItems[i].querySelector('.cart-item-description').textContent;
+            if (itemId === productId) {
+                cartItems[i].remove();
+                break;
+            }
+        }
+
+        // Обновляем общую стоимость
+        updateTotalPrice();
+    }
+
+    // Функция для очистки корзины
+    function clearCart() {
+        let cartItems = document.querySelectorAll('.cart-item');
+        for (let i = 0; i < cartItems.length; i++) {
+            cartItems[i].remove();
+        }
+
+        // Обновляем общую стоимость
+        updateTotalPrice();
+    }
+
+    // Функция для обновления общей стоимости
+    function updateTotalPrice() {
+        let cartItems = document.querySelectorAll('.cart-item');
+        let totalPrice = 0;
+        for (let i = 0; i < cartItems.length; i++) {
+            let itemPrice = parseFloat(cartItems[i].querySelector('.cart-item-price').textContent);
+            totalPrice += itemPrice;
+        }
+
+        // Отображаем общую стоимость
+        document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+    }
+
+    // Функция для открытия модального окна
+    function openModal() {
+        let modal = document.querySelector('.modal');
+        modal.style.display = 'block';
+    }
+
+    // Функция для закрытия модального окна
+    function closeModal() {
+        let modal = document.querySelector('.modal');
+        modal.style.display = 'none';
+    }
+</script>
+</body> </html>
+
+
+фотграфия должна доставатся из базы данных

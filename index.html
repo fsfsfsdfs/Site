@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-ZLRDbLlMx7O/cK1HLeC6ukDE2sqmt36XJ5A3NzVtR6TwhdBU3qWJrE9b+P3zgM4Fl1N5u2D7x1Db4eJP5YKwYg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> "Сайко"</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: "Noto Sans JP", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 4.5em; /* Больше размер заголовка */
+        }
+        header p {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        header .contact-info {
+            font-size: 1.9em;
+            position: absolute; /* Позиция абсолютная */
+            top: 20px; /* Смещение от верха */
+            right: 20px; /* Смещение от правого края */
+        }
+        header .working-hours {
+            font-size: 1.1em;
+            position: absolute; /* Позиция абсолютная */
+            top: 60px; /* Смещение от верха */
+            right: 35px; /* Смещение от правого края */
+        }
+        /* Стили для кнопки корзины */
+        .cart-button {
+            background-color: #4CAF50;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            top: 30px;
+            right: 20px;
+            z-index: 999;
+        }
+        .cart-button:hover {
+            background-color: #45a049;
+        }
+        /* Стили для меню */
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        nav {
+            margin-top: 20px; /* Добавляем больше расстояния сверху */
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease; /* Добавляем плавное изменение цвета */
+            margin-right: 20px; /* Отступ между элементами меню */
+        }
+        nav a:hover {
+            color: #4CAF50; /* Зеленый цвет при наведении */
+        }
+        .card-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .card-description {
+            margin-bottom: 10px;
+        }
+        .card-price {
+            font-size: 1.2em;
+            color: #008000;
+        }
+        /* Стили для уведомления */
+        #notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 999;
+        }
+        /* Стили для контактов и подвала */
+        .contacts {
+            margin-top: 50px;
+            text-align: center;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+        footer p {
+            margin: 0;
+        }
+        /* Стили для кнопок категорий */
+        .category-buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        logoimg {
+            width: 150px; /* Устанавливает ширину изображения в 300 пикселей */
+            height: 150px; /* Устанавливает высоту изображения в 200 пикселей */
+        }
+        .category-button {
+            background-color: #45a049;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .category-button:hover {
+            background-color: #4CAF50;
+        }
+        /* Стили для кнопки "Добавить в корзину" */
+        .add-to-cart {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .add-to-cart:hover {
+            background-color: #45a049;
+        }
+        /* Стили для корзины */
+        #cart {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 999;
+        }
+        #cart-items {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .cart-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+        .cart-item .quantity,
+        .cart-item .total {
+            font-weight: bold;
+        }
+        .cart-item .remove-item {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 10px;
+        }
+        .cart-item .remove-item:hover {
+            background-color: #d1372f;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <img src="/static/img/logo.png" alt="logoimg" style="width:550px; height: 250px; position: relative; top: 120px; left: -600px;">
+    <div class="contact-info">
+        <i class="fas fa-phone"></i>
+        <span>+8(923)800-02-29</span>
+    </div>
+    <div class="working-hours">
+        <i class="far fa-clock"></i>
+        <span>Ежедневно: 10:00 - 21:00</span>
+    </div>
+    <h1>Добро пожаловать в "Сайко"</h1>
+    <p>Доставка еды: роллы, пицца, супы, вок</p>
+    <p>Тел. 89238000229</p>
+    <p>Окунитесь в атмосферу азиатско-японской кухни.</p>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="#menu">Меню</a>
+        <a href="#about">О нас</a>
+        <a href="#contacts">Контакты</a>
+        <!-- Добавить ссылку на корзину -->
+        <a href="/cart">Корзина (<span id="cart-count" style="color: white; font-weight: bold;"></span>)</a>
+    </nav>
+</header>
+<div class="container">
+    <!-- Добавляем кнопки категорий -->
+    <div class="category-buttons">
+        <button class="category-button" data-category="all">Все</button>
+        <button class="category-button" data-category="Суши">Суши</button>
+        <button class="category-button" data-category="Горячие роллы">Горячие роллы</button>
+        <button class="category-button" data-category="Супы">Супы</button>
+        <button class="category-button" data-category="Холодные роллы">Холодные роллы</button>
+        <button class="category-button" data-category="Сеты">Сеты</button>
+        <button class="category-button" data-category="Вок лапша">Вок лапша</button>
+        <button class="category-button" data-category="Пицца">Пицца</button>
+        <button class="category-button" data-category="Закуски">Закуски</button>
+    </div>
+    <section class="menu">
+        {% for card in cards %}
+        <div class="card" data-category="{{ card.category }}" data-id="{{ card.id }}">
+            <img src="data:image/png;base64,{{ card.image }}" alt="Card Image" style="width: 350px; height: 200px;">
+            <h3 class="card-title">{{ card.name }}</h3>
+            <p class="card-description">{{ card.description }}</p>
+            <p class="card-price">₱{{ card.price }}</p>
+            <button class="add-to-cart" data-product-id="{{ card.id }}" data-product-name="{{ card.name }}" data-product-price="{{ card.price }}">Добавить в корзину</button>
+        </div>
+        {% endfor %}
+    </section>
+    <section id="contacts" class="contacts">
+        <h2>Контакты</h2>
+        <address>
+            <p>Адрес: Республика Алтай, г. Бийск, ул. И. Мухачева, 200, ТРЦ "Сандаи", 3 этаж</p>
+            <p>Телефон: +8(923)800-02-29</p>
+            <p>ИП Александр Владимирович Горбков, ИНН: 220409205615</p>
+        </address>
+    </section>
+</div>
+<div id="cart">
+    <h2>Корзина</h2>
+    <ul id="cart-items"></ul>
+    <button class="clear-cart-btn">Очистить корзину</button>
+    <button class="pay-btn">Оплатить</button>
+</div>
+<footer>
+    <p>© 2024 "Сайко". Все права защищены.</p>
+</footer>
+<!-- Всплывающее уведомление -->
+<div id="notification"></div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const menu = document.querySelector('.menu');
+    const notification = document.getElementById('notification');
+    const cartCount = document.getElementById('cart-count');
+    const cartTotal = document.getElementById('cart-total');
+    const cartItems = document.querySelector('#cart-items');
+    const categoryButtons = document.querySelectorAll('.category-button');
+    // Функция для отображения карточек по выбранной категории
+    function filterMenuItems(category) {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            const cardCategory = card.dataset.category;
+            if (cardCategory === category || category === 'all') {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    // Инициализация отображения всех карточек при загрузке страницы
+    filterMenuItems('all');
+    
+    // Обработчик события для кнопок категорий
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const category = this.dataset.category;
+            filterMenuItems(category);
+        });
+    });
+    
+    // Функция для получения количества товаров в корзине из localStorage
+    function getCartItemCount() {
+    // Возвращает количество товаров в корзине
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    return cartItems.reduce((count, item) => count + item.quantity, 0);
+    }   
+    
+    function getCartTotal() {
+    // Возвращает общую сумму товаров в корзине
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    }
+    
+    // Функция для добавления товара в корзину
+    function addToCart(card) {
+    const cardId = card.dataset.id;
+    const cardName = card.dataset.productName;
+    const cardPrice = card.dataset.productPrice;
+    showNotification(`Товар успешно добавлен в корзину`);
+
+    // Сохраняем данные продукта в localStorage
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const productExists = cartItems.some(item => item.id === cardId);
+    if (!productExists) {
+        cartItems.push({ id: cardId, name: cardName, price: cardPrice, quantity: 1, image: card.querySelector('img').src });
+    } else {
+        cartItems = cartItems.map(item => {
+            if (item.id === cardId) {
+                item.quantity++;
+            }
+            return item;
+        });
+    }
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+    // Обновляем количество товаров в корзине
+    const cartCount = document.getElementById('cart-count');
+    cartCount.textContent = parseInt(cartCount.textContent) + 1;
+
+    // Отображаем уведомление
+    const notification = document.getElementById('notification');
+    notification.textContent = `Товар успешно добавлен в корзину`;
+    notification.style.display = 'block';
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
+
+    // Перенаправляем на страницу корзины
+}
+
+    // Функция для удаления товара из корзины
+    function removeFromCart(cardId) {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        const updatedCartItems = cartItems.filter(item => item.id !== cardId);
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+        cartCount.textContent = getCartItemCount();
+        updateCartTotal();
+        updateCartItems();
+    }
+    
+    // Функция для обновления общего количества и суммы товаров в корзине
+    function updateCartTotal() {
+    const total = getCartTotal();
+    cartTotal.textContent = `Общая сумма: ₽${total.toFixed(2)}`;
+    }   
+    
+    // Функция для отображения карточек товаров в корзине
+    function updateCartItems() {
+    const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+    const cartItemsList = document.querySelector('#cart-items');
+    cartItemsList.innerHTML = '';
+
+    cartItems.forEach(item => {
+        const cartItem = document.createElement('li');
+        cartItem.classList.add('cart-item');
+        cartItem.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <div>
+                <span class="cart-item-name">${item.name}</span>
+                <span class="cart-item-price">${item.price} x ${item.quantity}</span>
+                <span class="cart-item-total">${(item.price * item.quantity).toFixed(2)}</span>
+                <button class="remove-item" data-id="${item.id}">Удалить</button>
+            </div>
+        `;
+        cartItemsList.appendChild(cartItem);
+    });
+}
+
+    
+    // Обработчик события для кнопок "Добавить в корзину"
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const card = this.parentElement;
+            addToCart(card);
+        });
+    });
+    
+    // Обработчик события для кнопки корзины
+    const cartButton = document.querySelector('.cart-button');
+    cartButton.addEventListener('click', function () {
+        const cart = document.getElementById('cart');
+        cart.style.display = cart.style.display === 'none' ? 'block' : 'none';
+        updateCartItems();
+    });
+    
+    // Отображение количества товаров в верхнем меню
+    cartCount.textContent = getCartItemCount();
+    
+    // Обновление общего количества и суммы товаров в корзине
+    updateCartTotal();
+    
+    // Всплывающее уведомление
+    function showNotification(message) {
+        notification.textContent = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+    
+    // Отображение корзины при нажатии на кнопку корзины в верхнем меню
+    const cart = document.getElementById('cart');
+    cart.style.display = 'none';
+    cartButton.addEventListener('click', function () {
+        cart.style.display = cart.style.display === 'none' ? 'block' : 'none';
+        updateCartItems();
+    });
+});
+</script>
+</body>
+</html>

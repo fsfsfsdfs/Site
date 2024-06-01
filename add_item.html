@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить элемент меню</title>
+</head>
+<body>
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+        <h1>Добавить элемент меню</h1>
+        <form action="/add_item" method="POST" enctype="multipart/form-data">
+            <label for="image" style="display: block; margin-bottom: 5px;">Изображение:</label>
+            <input type="file" id="image" name="image" accept="image/*" required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;"><br>
+            
+            <label for="name" style="display: block; margin-bottom: 5px;">Название:</label>
+            <input type="text" id="name" name="name" required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;"><br>
+            
+            
+            
+            <label for="category" style="display: block; margin-bottom: 5px;">Категория:</label>
+            <select id="category" name="category" required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                <option value="Супы">Супупупы</option>
+                <option value="Горячие роллы">Горячие роллы</option>
+                <option value="Холодные роллы">Холодные роллы</option>
+                <option value="Сеты">Сеты</option>
+                <option value="Вок лапша">Вок лапша</option>
+                <option value="Пицца">Пицца</option>
+                <option value="Закуски">Закуски</option>
+            </select><br>
+            
+            <label for="description" style="display: block; margin-bottom: 5px;">Описание:</label>
+            <textarea id="description" name="description" rows="4" required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;"></textarea><br>
+            
+            <label for="price" style="display: block; margin-bottom: 5px;">Цена:</label>
+            <input type="number" id="price" name="price" min="0" step="0.01" required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;"><br>
+            
+            <input type="submit" value="Добавить" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+        </form>
+    </div>
+    <script>
+        document.getElementById('add-form').addEventListener('submit', function(event) {
+          event.preventDefault();
+          var form = event.target;
+          var formData = new FormData(form);
+          var xhr = new XMLHttpRequest();
+          xhr.open(form.method, form.action);
+          xhr.onload = function() {
+            if (xhr.status === 200) {
+              // Обновляем данные на странице index.html с помощью AJAX
+              var xhr2 = new XMLHttpRequest();
+              xhr2.open('GET', '/');
+              xhr2.onload = function() {
+                if (xhr2.status === 200) {
+                  var response = JSON.parse(xhr2.responseText);
+                  var cards = response.cards;
+                  // Отображаем карточки на странице index.html
+                  // Здесь ваш код для отображения карточек
+                }
+              };
+              xhr2.send();
+            }
+          };
+          xhr.send(formData);
+        });
+      </script>      
+</body>
+</html>
